@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARMI TV Rotation</title>
 <!--
-  ARMI TV ROTATOR
-  Put this file in the ROOT of the tv-dashboards repo (next to README.md).
-  Each TV opens its own URL. Examples:
+  ARMI TV ROTATOR  (lives in the ROOT of the tv-dashboards repo, next to README.md)
 
-    .../tv-dashboards/rotate.html?pages=PUP/,SALES/&secs=60,30
-    .../tv-dashboards/rotate.html?pages=HVAC/,SALES/&secs=60,30
-    .../tv-dashboards/rotate.html?pages=PEI/,TF/,SALES/&secs=45
+  Each TV opens its own link. Easiest: use the short link page in each BU folder,
+  for example  .../tv-dashboards/TF/tv.html
 
-  pages  = comma list of folders in this repo, or full https:// URLs
-  secs   = seconds per page, same order as pages (one value = same for all)
-  reload = minutes between full refreshes so new monthly numbers appear (default 30)
+  Or build a link by hand:
+    rotate.html?pages=PAGE1,PAGE2,PAGE3&secs=60,30,30
+
+  pages  = comma list of pages in this repo (or full https:// links), shown in order, then repeats
+  secs   = seconds for each page, same order as pages (one number = same for all)
+  reload = minutes between full refreshes so new numbers appear (default 30)
+
+  Pages taller than the screen scroll slowly top to bottom while they are showing.
 -->
 <style>
   html, body { margin: 0; height: 100%; background: #0B0D12; overflow: hidden; cursor: none; }
@@ -31,10 +33,10 @@
 (function () {
   var q = new URLSearchParams(window.location.search);
 
-  var pages = (q.get('pages') || 'PUP/,SALES/').split(',');
+  var raw = (q.get('pages') || 'TF/').split(',');
   var list = [];
-  for (var p = 0; p < pages.length; p++) {
-    var s = pages[p].replace(/^\s+|\s+$/g, '');
+  for (var p = 0; p < raw.length; p++) {
+    var s = raw[p].replace(/^\s+|\s+$/g, '');
     if (s) list.push(s);
   }
 
@@ -47,36 +49,65 @@
   var reloadMin = Number(q.get('reload') || 30);
   if (isNaN(reloadMin) || reloadMin < 5) reloadMin = 30;
 
-  // Cache-buster so the TV does not keep showing last month's numbers
+  // Cache-buster so the TV does not keep showing old numbers
   var stamp = Date.now();
   function bust(url) {
-    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + stamp;
+    var hash = '';
+    var h = url.indexOf('#');
+    if (h !== -1) { hash = url.slice(h); url = url.slice(0, h); }
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + stamp + hash;
   }
 
-  // Load every page once, then just switch visibility (no blank flash)
   var frames = [];
   for (var i = 0; i < list.length; i++) {
     var f = document.createElement('iframe');
     f.src = bust(list[i]);
     f.setAttribute('scrolling', 'no');
-    f.setAttribute('aria-hidden', 'true');
     document.body.appendChild(f);
     frames.push(f);
   }
 
-  var cur = 0;
-  if (frames.length) frames[0].className = 'on';
-
-  function next() {
-    if (frames.length < 2) return;
-    frames[cur].className = '';
-    cur = (cur + 1) % frames.length;
-    frames[cur].className = 'on';
-    setTimeout(next, dwell(cur));
+  // Slow scroll for pages taller than the screen
+  var scrollTimer = null;
+  function stopScroll() { if (scrollTimer) { clearInterval(scrollTimer); scrollTimer = null; } }
+  function startScroll(f, ms) {
+    stopScroll();
+    var win, doc;
+    try { win = f.contentWindow; doc = win.document; } catch (e) { return; } // other website: cannot scroll
+    if (!doc || !doc.documentElement) return;
+    win.scrollTo(0, 0);
+    var extra = doc.documentElement.scrollHeight - win.innerHeight;
+    if (extra < 40) return;                       // fits on screen, nothing to do
+    var hold = Math.min(5000, ms * 0.15);          // pause at top and at bottom
+    var travel = ms - hold * 2;
+    if (travel < 2000) return;
+    var start = Date.now() + hold;
+    scrollTimer = setInterval(function () {
+      var t = (Date.now() - start) / travel;
+      if (t < 0) return;
+      if (t > 1) t = 1;
+      win.scrollTo(0, Math.round(extra * t));
+    }, 40);
   }
-  setTimeout(next, dwell(0));
 
-  // Full refresh on a schedule to pick up new data and recover from errors
+  var cur = 0;
+  function show(n) {
+    frames[cur].className = '';
+    cur = n;
+    frames[cur].className = 'on';
+    startScroll(frames[cur], dwell(cur));
+    setTimeout(function () { show((cur + 1) % frames.length); }, dwell(cur));
+  }
+
+  if (frames.length === 1) {
+    frames[0].className = 'on';
+  } else if (frames.length > 1) {
+    // give the first page a moment to load before measuring it
+    frames[0].className = 'on';
+    frames[0].onload = function () { startScroll(frames[0], dwell(0)); };
+    setTimeout(function () { show(1 % frames.length); }, dwell(0));
+  }
+
   setTimeout(function () { window.location.reload(); }, reloadMin * 60 * 1000);
 })();
 </script>
