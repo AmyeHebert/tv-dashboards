@@ -3,21 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Thermal Fluid TV</title>
-<!--
-  Short TV link for the Thermal Fluid screen.
-  Order: Sales Dashboard (60s, scrolls) -> Leaderboard page 1 (30s) -> Leaderboard page 2 (30s) -> Tyler's TF board (60s) -> repeat
-  To change the order or timing, edit the two lists below and upload this file again.
--->
-<script>
-  var pages = [
-    'TF/Sales/sales.html',
-    'TF/Sales/leaderboard.html?page=1&hold=1',
-    'TF/Sales/leaderboard.html?page=2&hold=1',
-    'TF/'
-  ];
-  var secs = [60, 30, 30, 60];
-  location.replace('../rotate.html?pages=' + encodeURIComponent(pages.join(',')) + '&secs=' + secs.join(','));
-</script>
+<!-- Short TV link for the Thermal Fluid screen. Sends the TV to the 3-slide golf rotation. -->
+<meta http-equiv="refresh" content="0; url=TF_Leaderboard_TV.html">
 </head>
-<body style="background:#0B0D12"></body>
+<body style="background:#000"></body>
 </html>
