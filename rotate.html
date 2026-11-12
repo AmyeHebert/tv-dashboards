@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARMI TV Rotation</title>
+<!--
+  ARMI TV ROTATOR
+  Put this file in the ROOT of the tv-dashboards repo (next to README.md).
+  Each TV opens its own URL. Examples:
+
+    .../tv-dashboards/rotate.html?pages=PUP/,SALES/&secs=60,30
+    .../tv-dashboards/rotate.html?pages=HVAC/,SALES/&secs=60,30
+    .../tv-dashboards/rotate.html?pages=PEI/,TF/,SALES/&secs=45
+
+  pages  = comma list of folders in this repo, or full https:// URLs
+  secs   = seconds per page, same order as pages (one value = same for all)
+  reload = minutes between full refreshes so new monthly numbers appear (default 30)
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #0B0D12; overflow: hidden; cursor: none; }
+  iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    border: 0; opacity: 0; transition: opacity 0.8s ease;
+  }
+  iframe.on { opacity: 1; }
+</style>
+</head>
+<body>
+<script>
+(function () {
+  var q = new URLSearchParams(window.location.search);
+
+  var pages = (q.get('pages') || 'PUP/,SALES/').split(',');
+  var list = [];
+  for (var p = 0; p < pages.length; p++) {
+    var s = pages[p].replace(/^\s+|\s+$/g, '');
+    if (s) list.push(s);
+  }
+
+  var secs = (q.get('secs') || '60').split(',');
+  function dwell(i) {
+    var v = Number(secs[i] !== undefined ? secs[i] : secs[0]);
+    return (isNaN(v) || v < 5 ? 60 : v) * 1000;
+  }
+
+  var reloadMin = Number(q.get('reload') || 30);
+  if (isNaN(reloadMin) || reloadMin < 5) reloadMin = 30;
+
+  // Cache-buster so the TV does not keep showing last month's numbers
+  var stamp = Date.now();
+  function bust(url) {
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + stamp;
+  }
+
+  // Load every page once, then just switch visibility (no blank flash)
+  var frames = [];
+  for (var i = 0; i < list.length; i++) {
+    var f = document.createElement('iframe');
+    f.src = bust(list[i]);
+    f.setAttribute('scrolling', 'no');
+    f.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(f);
+    frames.push(f);
+  }
+
+  var cur = 0;
+  if (frames.length) frames[0].className = 'on';
+
+  function next() {
+    if (frames.length < 2) return;
+    frames[cur].className = '';
+    cur = (cur + 1) % frames.length;
+    frames[cur].className = 'on';
+    setTimeout(next, dwell(cur));
+  }
+  setTimeout(next, dwell(0));
+
+  // Full refresh on a schedule to pick up new data and recover from errors
+  setTimeout(function () { window.location.reload(); }, reloadMin * 60 * 1000);
+})();
+</script>
+</body>
+</html>
