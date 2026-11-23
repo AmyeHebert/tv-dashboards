@@ -1,89 +1,46 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="light">
-<title>Thermal Fluid October 2026 report card</title><style>
-:root{color-scheme:light;--s:#fcfcfb;--pl:#f9f9f7;--i:#0b0b0b;--i2:#52514e;--m:#898781;--gr:#e1e0d9;--ax:#c3c2b7;
---p:#2a78d6;--p2:#86b6ef;--n:#e34948;--good:#0ca30c;--warn:#fab219;--crit:#d03b3b;--bd:rgba(11,11,11,.10)}
-
-*{box-sizing:border-box}body{margin:0;background:var(--pl);color:var(--i);font:15.5px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-.shell{max-width:1020px;margin:0 auto;padding:28px 22px 60px}
-.pg{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:26px 28px;margin-bottom:20px}
-.eb{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--m);font-weight:650}
-h1{font-size:27px;margin:6px 0;letter-spacing:-.02em}h2{font-size:21px;margin:5px 0 0;letter-spacing:-.015em}
-h3{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--m);margin:0 0 8px;font-weight:650}
-h4{font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 9px;font-weight:700}
-.cap{text-transform:none;letter-spacing:0;font-weight:450}
-.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid var(--gr);padding-bottom:16px;margin-bottom:20px}
-.vd{font-size:14px;color:var(--i2);margin-top:8px;max-width:62ch}
-.gb{text-align:center;flex:none;border:1px solid var(--bd);border-radius:12px;padding:10px 16px 8px;min-width:86px;background:var(--pl)}
-.gl{font-size:40px;font-weight:750;line-height:1;letter-spacing:-.03em}
-.gs{font-size:11px;color:var(--m);margin-top:4px;font-variant-numeric:tabular-nums}
-.gb.a .gl{color:var(--good)}.gb.b .gl{color:var(--p)}.gb.c .gl{color:var(--warn)}.gb.d .gl,.gb.f .gl{color:var(--crit)}
-.cats{margin-bottom:22px}
-.cr{display:grid;grid-template-columns:140px 130px 30px 1fr;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--gr);font-size:13.5px}
-.cn{font-weight:650}
-.ctr{background:var(--gr);border-radius:4px;height:8px;overflow:hidden}
-.cf{height:8px;border-radius:4px}.cf.g{background:var(--good)}.cf.b{background:var(--p)}.cf.c{background:var(--warn)}.cf.d,.cf.f{background:var(--crit)}
-.cvv{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
-.cvv.g{color:var(--good)}.cvv.b{color:var(--p)}.cvv.c{color:#7a5200}.cvv.d,.cvv.f{color:var(--crit)}
-
-.cd{color:var(--i2)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.hb{border:1px solid var(--bd);border-radius:10px;padding:15px 17px;background:var(--pl);border-left:3px solid var(--ax)}
-.hb.good{border-left-color:var(--good)}.hb.good h4{color:#006300}
-.hb.bad{border-left-color:var(--crit)}.hb.bad h4{color:#a12727}
-
-.hb ul{margin:0;padding-left:17px}.hb li{margin:6px 0;font-size:13.5px;color:var(--i2);line-height:1.5}
-.hb li b{color:var(--i)}
-.sp .b.p{fill:var(--p2)}.sp .b.n{fill:var(--n)}.sp .b.hl{fill:var(--p)}.sp .zl{stroke:var(--ax)}
-.sp .xl{fill:var(--m);font-size:9.5px;text-anchor:middle;font-family:inherit}.sp .xl.hlx{fill:var(--i);font-weight:700}
-.sp rect:hover{opacity:.75}
-.kv{width:100%;border-collapse:collapse;margin-top:20px;border-top:1px solid var(--ax)}
-.kv td{padding:12px 10px 12px 0;font-size:12px;color:var(--m);text-transform:uppercase;letter-spacing:.04em;font-weight:650;white-space:nowrap}
-.kv td.n{color:var(--i);text-transform:none;letter-spacing:0;font-size:15.5px;font-weight:700;font-variant-numeric:tabular-nums;padding:12px 30px 12px 0}
-.mu{color:var(--m);font-weight:450}.p{color:var(--p)}.x{color:var(--n)}
-.mix{margin-top:6px;font-size:12.5px;color:var(--i2);display:flex;gap:16px;flex-wrap:wrap;align-items:center;
-border-top:1px solid var(--gr);padding-top:12px}
-.mxl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--m);font-weight:650}
-.mp i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
-.d0{background:#2a78d6}.d1{background:#eb6834}.d2{background:#1baf7a}.d3{background:#eda100}.d4{background:#e87ba4}
-.big{width:100%;border-collapse:collapse;margin-top:20px}
-.big th{text-align:right;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--m);font-weight:650;padding:0 0 9px 12px;border-bottom:1px solid var(--ax)}
-.big th:first-child,.big th:nth-child(2){text-align:left;padding-left:0}
-.big td{text-align:right;padding:11px 0 11px 12px;border-bottom:1px solid var(--gr);color:var(--i);font-variant-numeric:tabular-nums}
-.big td.bu{text-align:left;padding-left:0;font-weight:700}.big td.gcell{text-align:left}
-.gt{display:inline-block;min-width:26px;text-align:center;font-weight:750;font-size:15px;padding:2px 7px;border-radius:6px}
-.gt.a{color:#006300;background:rgba(12,163,12,.12)}.gt.b{color:#1c5cab;background:rgba(42,120,214,.12)}
-.gt.c{color:#7a5200;background:rgba(250,178,25,.18)}.gt.d,.gt.f{color:#a12727;background:rgba(208,59,59,.14)}
-
-.sub{color:var(--i2);margin:8px 0 0;max-width:76ch}
-.nt{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--gr);font-size:13.5px;color:var(--i2)}
-
-@media print{body{background:#fff}.pg{page-break-after:always;border:none;padding:0;margin:0 0 18px}}
-
-html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#f9f9f7}
-#fit{position:absolute;left:0;top:0;transform-origin:0 0;width:1480px}
-#fit .pg{margin:0;border:none;border-radius:0;padding:34px 44px}
-#fit .vd{max-width:none}
-</style></head><body><div id="fit"><section class="pg"><div class="hd"><div><div class="eb">October 2026 report card</div><h2>B30 — Thermal Fluid</h2>
-<div class="vd">Almost no revenue in October — $14,455 against $72,071 of job cost — and the gate that opened in September is shut again by $40,752.</div></div><div class="gb f"><div class="gl">F</div><div class="gs">17/100</div></div></div>
-<div class="cats"><div class="cr"><div class="cn">Revenue vs goal</div><div class="ctr"><div class="cf f" style="width:2%"></div></div>
-<div class="cvv f">2</div><div class="cd">$14,455 · 2% of the $708,333 monthly goal</div></div><div class="cr"><div class="cn">Margin vs target</div><div class="ctr"><div class="cf f" style="width:0%"></div></div>
-<div class="cvv f">0</div><div class="cd">−398.6% against a 33% target</div></div><div class="cr"><div class="cn">Covered overhead</div><div class="ctr"><div class="cf f" style="width:0%"></div></div>
-<div class="cvv f">0</div><div class="cd">−$57,615 gross profit against a $153,215 burden</div></div><div class="cr"><div class="cn">Momentum</div><div class="ctr"><div class="cf f" style="width:0%"></div></div>
-<div class="cvv f">0</div><div class="cd">down 97% vs its own monthly average</div></div><div class="cr"><div class="cn">Cost discipline</div><div class="ctr"><div class="cf b" style="width:81%"></div></div>
-<div class="cvv b">81</div><div class="cd">own overhead $73,215, +9% vs its average</div></div></div>
-<div class="two">
-<div class="hb good"><h4>What went well</h4><ul><li><b>$558,729</b> of new work booked — best month since June (Line 21 fryer replacement, $395,599).</li><li>Backlog more than doubled, <b>$396,093 → $940,367</b>.</li><li>Year-to-date gross margin still <b>36.0%</b>, above the 33% target.</li></ul></div>
-<div class="hb bad"><h4>What did not</h4><ul><li>Revenue <b>$14,455</b> — lowest month of the year, 2% of the monthly goal.</li><li>Job cost <b>$72,071</b> with almost nothing billed: gross profit <b>−$57,615</b>.</li><li><b>−$210,831</b> after overhead; covered its burden in only 3 of 10 months (July–September).</li><li>Operating-income gate now <b>$40,752 short</b> — it was $90,079 clear after September.</li></ul></div></div>
-<div class="two" style="margin-top:22px">
-<div><h3>Revenue by month <span class="cap">October highlighted</span></h3><svg viewBox="0 0 330 74" width="100%" height="74" class="sp"><line x1="0" y1="58.0" x2="330" y2="58.0" class="zl"/><rect x="0.0" y="49.3" width="28.6" height="8.7" rx="4.0" class="b p"><title>Jan: $290,261</title></rect><text x="14.3" y="70" class="xl ">Jan</text><rect x="33.5" y="50.5" width="28.6" height="7.5" rx="3.8" class="b p"><title>Feb: $252,072</title></rect><text x="47.8" y="70" class="xl ">Feb</text><rect x="67.0" y="47.2" width="28.6" height="10.8" rx="4.0" class="b p"><title>Mar: $360,729</title></rect><text x="81.3" y="70" class="xl ">Mar</text><rect x="100.5" y="47.3" width="28.6" height="10.7" rx="4.0" class="b p"><title>Apr: $359,219</title></rect><text x="114.8" y="70" class="xl ">Apr</text><rect x="134.0" y="50.4" width="28.6" height="7.6" rx="3.8" class="b p"><title>May: $256,437</title></rect><text x="148.3" y="70" class="xl ">May</text><rect x="167.4" y="50.8" width="28.6" height="7.2" rx="3.6" class="b p"><title>Jun: $240,131</title></rect><text x="181.7" y="70" class="xl ">Jun</text><rect x="200.9" y="0.0" width="28.6" height="58.0" rx="4.0" class="b p"><title>Jul: $1,945,841</title></rect><text x="215.2" y="70" class="xl ">Jul</text><rect x="234.4" y="23.7" width="28.6" height="34.3" rx="4.0" class="b p"><title>Aug: $1,152,051</title></rect><text x="248.7" y="70" class="xl ">Aug</text><rect x="267.9" y="45.5" width="28.6" height="12.5" rx="4.0" class="b p"><title>Sep: $419,852</title></rect><text x="282.2" y="70" class="xl ">Sep</text><rect x="301.4" y="56.0" width="28.6" height="2.0" rx="1.0" class="b hl"><title>Oct: $14,455</title></rect><text x="315.7" y="70" class="xl hlx">Oct</text></svg></div>
-<div><h3>Gross margin by month</h3><svg viewBox="0 0 330 74" width="100%" height="74" class="sp"><line x1="0" y1="8.5" x2="330" y2="8.5" class="zl"/><rect x="0.0" y="6.5" width="28.6" height="2.0" rx="1.0" class="b p"><title>Jan: 13.4%</title></rect><text x="14.3" y="70" class="xl ">Jan</text><rect x="33.5" y="4.3" width="28.6" height="4.2" rx="2.1" class="b p"><title>Feb: 33.5%</title></rect><text x="47.8" y="70" class="xl ">Feb</text><rect x="67.0" y="6.5" width="28.6" height="2.0" rx="1.0" class="b p"><title>Mar: 8.6%</title></rect><text x="81.3" y="70" class="xl ">Mar</text><rect x="100.5" y="5.0" width="28.6" height="3.5" rx="1.7" class="b p"><title>Apr: 27.9%</title></rect><text x="114.8" y="70" class="xl ">Apr</text><rect x="134.0" y="3.6" width="28.6" height="4.9" rx="2.5" class="b p"><title>May: 39.5%</title></rect><text x="148.3" y="70" class="xl ">May</text><rect x="167.4" y="5.0" width="28.6" height="3.5" rx="1.7" class="b p"><title>Jun: 28.0%</title></rect><text x="181.7" y="70" class="xl ">Jun</text><rect x="200.9" y="3.4" width="28.6" height="5.1" rx="2.6" class="b p"><title>Jul: 41.2%</title></rect><text x="215.2" y="70" class="xl ">Jul</text><rect x="234.4" y="3.6" width="28.6" height="4.9" rx="2.4" class="b p"><title>Aug: 39.2%</title></rect><text x="248.7" y="70" class="xl ">Aug</text><rect x="267.9" y="0.0" width="28.6" height="8.5" rx="4.0" class="b p"><title>Sep: 68.3%</title></rect><text x="282.2" y="70" class="xl ">Sep</text><rect x="301.4" y="8.5" width="28.6" height="49.5" rx="4.0" class="b hl"><title>Oct: −398.6%</title></rect><text x="315.7" y="70" class="xl hlx">Oct</text></svg></div></div>
-<table class="kv"><tr><td>October revenue</td><td class="n">$14,455</td>
-<td>Gross profit</td><td class="n">−$57,615 <span class="mu">(−398.6%)</span></td>
-<td>Burden</td><td class="n">$153,215</td>
-<td>After overhead</td><td class="n x"><b>−$210,831</b></td></tr></table>
-<div class="mix"><span class="mxl">October job cost mix</span><span class="mp"><i class="d0"></i>labor 25%</span><span class="mp"><i class="d1"></i>material 16%</span><span class="mp"><i class="d2"></i>subs 44%</span><span class="mp"><i class="d3"></i>equip 3%</span><span class="mp"><i class="d4"></i>other 13%</span></div>
-</section></div>
-<script>
-const f=document.getElementById('fit');const s=Math.min(1920/f.offsetWidth,1080/f.offsetHeight);
-f.style.transform=`scale(${s})`;f.style.left=((1920-f.offsetWidth*s)/2)+'px';f.style.top=((1080-f.offsetHeight*s)/2)+'px';
-</script></body></html>
+<!doctype html><html><head><meta charset="utf-8"><title>TV Board - B30 Thermal Fluid</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:calc(100vh / 108)}
+body{height:100vh;overflow:hidden;background:#0b0b0a;color:#f2f1ec;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums}
+.wrap{width:192rem;height:108rem;margin:0 auto;padding:3.2rem 4rem;display:flex;flex-direction:column;gap:2rem}
+.wrap>*{flex-shrink:0}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end}
+.code{font-size:2.4rem;letter-spacing:.3em;color:#8d8b83;font-weight:700}
+.name{font-size:5.6rem;font-weight:800;line-height:1;letter-spacing:-.01em;margin-top:.6rem}
+.asof{text-align:right;font-size:2rem;color:#a9a79f;line-height:1.4}
+.asof b{color:#f2f1ec;font-size:2.6rem}
+.gate{border-radius:1.4rem;padding:1.8rem 3rem;display:flex;justify-content:space-between;align-items:center}
+.gate.open{background:rgba(46,204,74,.13);border:.3rem solid #2ecc4a}
+.gate.shut{background:rgba(255,90,90,.11);border:.3rem solid #ff5a5a}
+.gate .t{font-size:4.6rem;font-weight:850;letter-spacing:.02em}
+.gate.open .t{color:#2ecc4a}.gate.shut .t{color:#ff5a5a}
+.gate .d{font-size:2.5rem;color:#d6d4cc;text-align:right;line-height:1.35}
+.gauge{position:relative;height:9rem;margin:2.4rem 0 1.2rem}
+.track{position:absolute;left:0;right:0;top:2.6rem;height:4rem;background:#22221f;border-radius:2rem;overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:2rem}
+.mark{position:absolute;top:0;height:9.2rem;border-left:.4rem solid}
+.mark span{position:absolute;top:-2.6rem;transform:translateX(-50%);white-space:nowrap;font-size:2rem;font-weight:700}
+.mark em{position:absolute;bottom:-2.6rem;transform:translateX(-50%);white-space:nowrap;font-size:1.9rem;font-style:normal;color:#a9a79f}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.card{background:#161614;border-radius:1.4rem;padding:2.2rem 2.6rem;border-top:.6rem solid #33332f}
+.card.ok{border-top-color:#2ecc4a}.card.no{border-top-color:#ff5a5a}.card.off{border-top-color:#ffc233}
+.card .k{font-size:2.3rem;color:#a9a79f;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between}
+.card .k i{font-style:normal;color:#77756d}
+.card .v{font-size:5.2rem;font-weight:850;margin:.8rem 0 .2rem;line-height:1.05}
+.card .p{font-size:2.3rem;color:#d6d4cc}
+.card .gap{font-size:3rem;font-weight:800;margin-top:1.2rem}
+.card .gap.ok{color:#2ecc4a}.card .gap.no{color:#ff5a5a}
+.card .gap small{font-size:2.2rem;font-weight:600;color:#d6d4cc;margin-left:.8rem}
+.card .tt{display:flex;justify-content:space-between;margin-top:1.4rem;padding-top:1.2rem;border-top:.15rem solid #2b2b28;font-size:2.1rem;color:#a9a79f}
+.card .tt b{color:#f2f1ec}
+.card .note{font-size:2rem;color:#ffc233;margin-top:.8rem;font-weight:600}
+.co{display:flex;align-items:center;justify-content:space-between;background:#161614;border-radius:1.4rem;padding:1.8rem 2.6rem;font-size:2.4rem;color:#d6d4cc}
+.co b{color:#f2f1ec;font-size:3rem}
+.foot{display:grid;grid-template-columns:2.2fr 1fr 1fr 1.25fr 1fr;gap:2rem;margin-top:auto}
+.f{background:#161614;border-radius:1.4rem;padding:1.8rem 2.2rem}
+.f .k{font-size:1.9rem;color:#a9a79f;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.f .v{font-size:4rem;font-weight:850;margin-top:.6rem;line-height:1.05}
+.f .s{font-size:1.9rem;color:#a9a79f;margin-top:.4rem}
+.good{color:#2ecc4a}.bad{color:#ff5a5a}.warn{color:#ffc233}
+svg text{font-family:inherit}
+</style></head><body><div class="wrap"><div class="hdr"><div><div class="code">B30</div><div class="name">Thermal Fluid</div></div><div class="asof"><b>October 2026</b><br>Actuals through 10/31 · 2 months left<br>Actuals only · no forecasts</div></div><div class="gate shut"><div class="t">GATE SHUT</div><div class="d"><b>$40,752</b> of operating income to open it — <b>$20,376</b> a month<br>Until it opens, NXA and PO received pay nothing</div></div><div class="gauge"><div class="track"><div class="fill" style="left:0.00%;width:58.93%;background:#ffc233"></div></div><div class="mark" style="left:60.87%;border-color:#f2f1ec"><span>GATE $1.28M</span></div><div class="mark" style="left:86.96%;border-color:#4a97f0"><span style="color:#4a97f0">TARGET $1.83M</span></div><div class="mark" style="left:58.93%;border-color:#ffc233;border-left-style:dotted"><em style="color:#f2f1ec;font-weight:800;font-size:2.2rem;">NOW $1.24M</em></div></div><div class="cards"><div class="card no"><div class="k">Operating income<i>75%</i></div><div class="v">$1,237,349</div><div class="p">68% of full-year target</div><div class="gap no">SHORT $40,752<small>$20,376/mo</small></div><div class="tt"><span>Threshold <b>$1,278,101</b></span><span>Target <b>$1,825,859</b></span></div></div><div class="card ok"><div class="k">Revenue sent to NXA<i>10%</i></div><div class="v">$39,148</div><div class="p">78% of full-year target</div><div class="gap ok">CLEARED by $4,148</div><div class="tt"><span>Threshold <b>$35,000</b></span><span>Target <b>$50,000</b></span></div><div class="note">Pays only when the gate opens</div></div><div class="card off"><div class="k">PO received<i>10%</i></div><div class="v">$5,645,664</div><div class="p">54% of full-year target</div><div class="gap no">SHORT $1,704,336<small>$852,168/mo</small></div><div class="tt"><span>Threshold <b>$7,350,000</b></span><span>Target <b>$10,500,000</b></span></div></div></div><div class="co"><span>Company operating income <span style="color:#77756d">· 5% · not gated</span></span><span><b>&#8722;$152,627</b> &nbsp;of $2,209,625 threshold</span><span class="bad" style="font-weight:800;font-size:2.8rem">SHORT $2,362,252 <span style="font-size:2.2rem;color:#d6d4cc;font-weight:600">$1,181,126/mo</span></span></div><div class="foot"><div class="f"><div class="k">Operating income by month</div><svg viewBox="0 0 560 96" width="100%" style="margin-top:.6rem"><line x1="0" x2="560" y1="66.0" y2="66.0" stroke="#55544f" stroke-width="1.5"/><rect x="8.4" y="66.0" width="39.2" height="2.0" rx="3" fill="#8a3a3a"/><text x="28.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">J</text><rect x="64.4" y="61.8" width="39.2" height="4.2" rx="3" fill="#3f6e48"/><text x="84.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">F</text><rect x="120.4" y="66.0" width="39.2" height="2.0" rx="3" fill="#8a3a3a"/><text x="140.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">M</text><rect x="176.4" y="63.0" width="39.2" height="3.0" rx="3" fill="#3f6e48"/><text x="196.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">A</text><rect x="232.4" y="63.9" width="39.2" height="2.1" rx="3" fill="#3f6e48"/><text x="252.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">M</text><rect x="288.4" y="66.0" width="39.2" height="2.0" rx="3" fill="#8a3a3a"/><text x="308.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">J</text><rect x="344.4" y="11.5" width="39.2" height="54.6" rx="3" fill="#3f6e48"/><text x="364.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">J</text><rect x="400.4" y="39.2" width="39.2" height="26.9" rx="3" fill="#3f6e48"/><text x="420.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">A</text><rect x="456.4" y="49.8" width="39.2" height="16.2" rx="3" fill="#3f6e48"/><text x="476.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">S</text><rect x="512.4" y="66.0" width="39.2" height="10.0" rx="3" fill="#ff5a5a"/><text x="532.0" y="94" font-size="15" fill="#8d8b83" text-anchor="middle">O</text></svg></div><div class="f"><div class="k">Revenue YTD</div><div class="v">$5.29M</div><div class="s">goal $8.50M · Oct. $14K</div></div><div class="f"><div class="k">Gross margin YTD</div><div class="v good">36.0%</div><div class="s">target 33% · Oct. &#8722;398.6%</div></div><div class="f"><div class="k">Oct. after overhead</div><div class="v bad">&#8722;$211K</div><div class="s">covered 3 of 10 months</div></div><div class="f"><div class="k">Backlog</div><div class="v warn">$940K</div><div class="s">goal $2.50M</div></div></div></div></body></html>
