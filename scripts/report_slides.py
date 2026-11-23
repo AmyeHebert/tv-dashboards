@@ -1,42 +1,68 @@
 """Use Tyler's monthly BU TV boards as each BU's first TV slide.
 
-Upload Tyler's TV board files (.html, title "TV Board - B10 ...", "TV Board - B20 ...", etc.)
-into the reports/ folder. For each BU code the newest month found there is copied to
-<BU>/report.html and shown as slide 1. Imported by build_boards.py.
+Upload Tyler's boards into the reports/ folder, either format:
+  - .png / .jpg  : the file name must contain the BU code (B10, B20, B30, B40)
+  - .html        : title "TV Board - B10 ...", "TV Board - B20 ...", etc.
+For each BU the most recently uploaded board wins. It is copied into the BU folder
+and shown as slide 1. Imported by build_boards.py.
 """
-import glob, os, re
+import glob, os, re, shutil, subprocess
 
-MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august',
-          'september', 'october', 'november', 'december']
+IMAGE_EXT = ('.png', '.jpg', '.jpeg', '.webp')
 
 
-def _month_key(text):
-    m = re.search(r'(' + '|'.join(MONTHS) + r')\s+(20\d\d)', text, re.I)
-    return (int(m.group(2)), MONTHS.index(m.group(1).lower()) + 1) if m else (0, 0)
+def _uploaded_at(root, path):
+    """Seconds since epoch of the last commit touching this file (falls back to file time)."""
+    try:
+        out = subprocess.run(['git', '-C', root, 'log', '-1', '--format=%ct', '--', os.path.relpath(path, root)],
+                             capture_output=True, text=True, timeout=30).stdout.strip()
+        if out:
+            return int(out)
+    except Exception:
+        pass
+    return int(os.path.getmtime(path))
+
+
+def _code(path):
+    name = os.path.basename(path)
+    if name.lower().endswith(IMAGE_EXT):
+        m = re.search(r'B([1-4]0)(?!\d)', name, re.I)
+        return f'B{m.group(1)}' if m else None
+    if name.lower().endswith(('.html', '.htm')):
+        t = open(path, encoding='utf-8', errors='replace').read(4000)
+        title = re.search(r'<title>(.*?)</title>', t, re.S | re.I)
+        m = re.search(r'TV Board\s*-\s*(B[1-4]0)\b', title.group(1) if title else '', re.I)
+        return m.group(1).upper() if m else None
+    return None
 
 
 def build(root, boards):
-    """Write <folder>/report.html for each BU with a TV board in reports/. Returns {folder: 'Month YYYY'}."""
-    newest = {}  # BU code -> (month key, filename, html)
-    for f in glob.glob(os.path.join(root, 'reports', '*.htm*')):
-        t = open(f, encoding='utf-8', errors='replace').read()
-        title = re.search(r'<title>(.*?)</title>', t, re.S | re.I)
-        m = re.search(r'TV Board\s*-\s*(B\d0)\b', title.group(1) if title else '', re.I)
-        if not m:
-            continue  # not a TV board (e.g. report cards) - ignored
-        code = m.group(1).upper()
-        body = t.split('</style>', 1)[-1]
-        key = _month_key(body)  # the board's "October 2026" heading
-        if code not in newest or key > newest[code][0]:
-            newest[code] = (key, os.path.basename(f), t)
+    """Write slide 1 for each BU that has a board in reports/. Returns {folder: slide file name}."""
+    newest = {}  # code -> (uploaded_at, path)
+    for f in glob.glob(os.path.join(root, 'reports', '*')):
+        code = _code(f)
+        if not code:
+            continue
+        when = _uploaded_at(root, f)
+        if code not in newest or when > newest[code][0]:
+            newest[code] = (when, f)
     out = {}
     for b in boards:
         if b['code'] not in newest:
             continue
-        (yr, mo), name, t = newest[b['code']]
-        t = re.sub(r'<script.*?</script>', '', t, flags=re.S | re.I)
-        with open(os.path.join(root, b['folder'], 'report.html'), 'w', encoding='utf-8') as fh:
-            fh.write(t)
-        out[b['folder']] = f'{MONTHS[mo-1].title()} {yr}' if yr else name
-        print(f"slide 1 for {b['folder']}: {name} ({out[b['folder']]})")
+        src = newest[b['code']][1]
+        folder = os.path.join(root, b['folder'])
+        for old in ('report.html', 'report.png', 'report.jpg', 'report.jpeg', 'report.webp'):
+            if os.path.exists(os.path.join(folder, old)):
+                os.remove(os.path.join(folder, old))
+        if src.lower().endswith(IMAGE_EXT):
+            dest = 'report' + os.path.splitext(src)[1].lower()
+            shutil.copyfile(src, os.path.join(folder, dest))
+        else:
+            dest = 'report.html'
+            t = open(src, encoding='utf-8', errors='replace').read()
+            t = re.sub(r'<script.*?</script>', '', t, flags=re.S | re.I)
+            open(os.path.join(folder, dest), 'w', encoding='utf-8').write(t)
+        out[b['folder']] = dest
+        print(f"slide 1 for {b['folder']}: {os.path.basename(src)} -> {dest}")
     return out

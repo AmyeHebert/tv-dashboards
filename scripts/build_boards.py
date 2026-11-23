@@ -310,7 +310,7 @@ def main():
     reports = report_slides.build(args.out, BOARDS) if args.out == ROOT else {}
     for b in BOARDS:
         # First slide: Tyler's monthly report card if one has been uploaded to reports/, otherwise board.png
-        fin = 'report.html' if b['folder'] in reports else 'board.png'
+        fin = reports.get(b['folder'], 'board.png')
         page, summary = render(b, open_deals, won, lost, today, fin)
         os.makedirs(os.path.join(args.out, b['folder']), exist_ok=True)
         with open(os.path.join(args.out, b['folder'], b['file']), 'w', encoding='utf-8') as f:
