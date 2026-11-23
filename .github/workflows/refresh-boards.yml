@@ -5,8 +5,8 @@ name: Refresh TV boards from Pipedrive
 #
 # Schedule: every hour, 5 AM to 6 PM Central, Monday to Friday (cron is in UTC).
 # Refresh right now: GitHub > Actions > "Refresh TV boards from Pipedrive" > Run workflow.
-# Monthly report cards: upload Tyler's report (.html) into reports/ and each BU's first slide
-# switches to its card from the newest month (runs automatically on upload).
+# Monthly TV boards: upload Tyler's "TV Board - Bxx" files into reports/ and each BU's first slide
+# switches to its board for the newest month (runs automatically on upload).
 # Needs repo secret PIPEDRIVE_API_TOKEN (Settings > Secrets and variables > Actions).
 
 on:

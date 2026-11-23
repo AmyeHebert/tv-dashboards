@@ -1,8 +1,8 @@
-"""Turn Tyler's monthly report-card file into each BU's first TV slide.
+"""Use Tyler's monthly BU TV boards as each BU's first TV slide.
 
-Upload the report (.html) into the reports/ folder. The newest month found there is
-split by unit (B10 PUP, B20 PEI, B30 TF, B40 HVAC) and written as <BU>/report.html,
-a 1920x1080 slide. Imported by build_boards.py.
+Upload Tyler's TV board files (.html, title "TV Board - B10 ...", "TV Board - B20 ...", etc.)
+into the reports/ folder. For each BU code the newest month found there is copied to
+<BU>/report.html and shown as slide 1. Imported by build_boards.py.
 """
 import glob, os, re
 
@@ -15,49 +15,28 @@ def _month_key(text):
     return (int(m.group(2)), MONTHS.index(m.group(1).lower()) + 1) if m else (0, 0)
 
 
-def latest_report(root):
-    files = glob.glob(os.path.join(root, 'reports', '*.htm*'))
-    best = None
-    for f in files:
-        t = open(f, encoding='utf-8', errors='replace').read()
-        title = re.search(r'<title>(.*?)</title>', t, re.S)
-        key = _month_key(title.group(1) if title else t[:4000])
-        if best is None or key > best[0]:
-            best = (key, f, t)
-    return best
-
-
 def build(root, boards):
-    """Write <folder>/report.html for each board found in the newest report. Returns {folder: label}."""
-    found = latest_report(root)
-    if not found:
-        return {}
-    (yr, mo), path, t = found
-    css = re.search(r'<style>(.*?)</style>', t, re.S).group(1)
-    css = re.sub(r'@media\s*\(prefers-color-scheme:dark\)\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}', '', css)  # keep the light look on every TV
-    css = re.sub(r'@media\s*\(max-width:820px\)\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}', '', css)
-    sections = re.findall(r'<section class="pg">.*?</section>', t, re.S)
-    label = f'{MONTHS[mo-1].title()} {yr}' if yr else 'Report'
+    """Write <folder>/report.html for each BU with a TV board in reports/. Returns {folder: 'Month YYYY'}."""
+    newest = {}  # BU code -> (month key, filename, html)
+    for f in glob.glob(os.path.join(root, 'reports', '*.htm*')):
+        t = open(f, encoding='utf-8', errors='replace').read()
+        title = re.search(r'<title>(.*?)</title>', t, re.S | re.I)
+        m = re.search(r'TV Board\s*-\s*(B\d0)\b', title.group(1) if title else '', re.I)
+        if not m:
+            continue  # not a TV board (e.g. report cards) - ignored
+        code = m.group(1).upper()
+        body = t.split('</style>', 1)[-1]
+        key = _month_key(body)  # the board's "October 2026" heading
+        if code not in newest or key > newest[code][0]:
+            newest[code] = (key, os.path.basename(f), t)
     out = {}
     for b in boards:
-        sec = next((s for s in sections if re.search(rf'<h2>\s*{b["code"]}\b', s)), None)
-        if not sec:
+        if b['code'] not in newest:
             continue
-        sec = re.sub(r'<script.*?</script>', '', sec, flags=re.S | re.I)
-        page = f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="light">
-<title>{b['name']} {label} report card</title><style>{css}
-html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:#f9f9f7}}
-#fit{{position:absolute;left:0;top:0;transform-origin:0 0;width:1480px}}
-#fit .pg{{margin:0;border:none;border-radius:0;padding:34px 44px}}
-#fit .vd{{max-width:none}}
-</style></head><body><div id="fit">{sec}</div>
-<script>
-const f=document.getElementById('fit');const s=Math.min(1920/f.offsetWidth,1080/f.offsetHeight);
-f.style.transform=`scale(${{s}})`;f.style.left=((1920-f.offsetWidth*s)/2)+'px';f.style.top=((1080-f.offsetHeight*s)/2)+'px';
-</script></body></html>
-'''
+        (yr, mo), name, t = newest[b['code']]
+        t = re.sub(r'<script.*?</script>', '', t, flags=re.S | re.I)
         with open(os.path.join(root, b['folder'], 'report.html'), 'w', encoding='utf-8') as fh:
-            fh.write(page)
-        out[b['folder']] = label
-    print(f'report slides from {os.path.basename(path)} ({label}): {sorted(out)}')
+            fh.write(t)
+        out[b['folder']] = f'{MONTHS[mo-1].title()} {yr}' if yr else name
+        print(f"slide 1 for {b['folder']}: {name} ({out[b['folder']]})")
     return out
