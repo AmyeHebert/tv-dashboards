@@ -123,7 +123,7 @@ EXTRA_CSS = '''.pill.blu{background:#2f5d8a}
 SCRIPT = '''<script>
 /* SETTINGS: FIN_SRC = the financial board image in this folder ('' to skip). SECONDS = per page:
    financial, leaderboard, pipeline, then each proposals page. This file is rebuilt automatically from Pipedrive. */
-const FIN_SRC='board.png';
+const FIN_SRC='%%FIN%%';
 const SECONDS=[60,60,60,60,60,60]; /* one per page; any page without a number gets 60 */
 const fin=document.getElementById('p0');
 if(FIN_SRC){fin.innerHTML=/\\.(png|jpe?g|webp)$/i.test(FIN_SRC)?`<img src="${FIN_SRC}" alt="">`:`<iframe src="${FIN_SRC}" scrolling="no"></iframe>`}
@@ -151,7 +151,7 @@ def window(today):
 
 
 # ------------------------------------------------------------------ render one board
-def render(b, open_deals, won, lost, today):
+def render(b, open_deals, won, lost, today, fin='board.png'):
     year = str(today.year)
     tiso = today.isoformat()
     ws, we = window(today)
@@ -289,7 +289,7 @@ def render(b, open_deals, won, lost, today):
 
     head = open(os.path.join(ROOT, 'scripts', 'tv_head.html'), encoding='utf-8').read().replace('{{TITLE}}', f'{name} Leaderboard')
     page = (head + EXTRA_CSS + '</style></head><body><div id="stage">\n\n<div class="page on fin" id="p0"></div>\n\n'
-            + p1 + '\n\n' + p2 + '\n\n' + p3 + '</div>\n' + SCRIPT)
+            + p1 + '\n\n' + p2 + '\n\n' + p3 + '</div>\n' + SCRIPT.replace('%%FIN%%', fin))
     summary = dict(board=b['folder'], open=open_n, open_value=round(open_v), forecast=round(fc), proposals=len(props),
                    proposal_value=round(prop_v), bids_this_week=n_week, past_due=n_past, won=tw, closed=tw + tl)
     return page, summary
@@ -305,8 +305,13 @@ def main():
     open_deals, won, lost = load(args, today.year)
     keep = lambda xs: [x for x in xs if x['id'] not in EXCLUDE_DEALS]
     open_deals, won, lost = keep(open_deals), keep(won), keep(lost)
+    sys.path.insert(0, os.path.join(ROOT, 'scripts'))
+    import report_slides
+    reports = report_slides.build(args.out, BOARDS) if args.out == ROOT else {}
     for b in BOARDS:
-        page, summary = render(b, open_deals, won, lost, today)
+        # First slide: Tyler's monthly report card if one has been uploaded to reports/, otherwise board.png
+        fin = 'report.html' if b['folder'] in reports else 'board.png'
+        page, summary = render(b, open_deals, won, lost, today, fin)
         os.makedirs(os.path.join(args.out, b['folder']), exist_ok=True)
         with open(os.path.join(args.out, b['folder'], b['file']), 'w', encoding='utf-8') as f:
             f.write(page)
