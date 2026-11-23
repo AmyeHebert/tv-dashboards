@@ -110,14 +110,13 @@ EXTRA_CSS = '''.pill.blu{background:#2f5d8a}
 .teegrid .td b{font-size:34px} .teegrid .tp{font-size:20px} .teegrid .tp span{font-size:16px} .teegrid .tv{font-size:30px}
 .p3{display:grid;grid-template-columns:1fr 1fr;gap:0} .p3 table:first-child{border-right:3px solid var(--ink)}
 .gr.g3 td{font-size:19px;padding:7px 12px} .gr.g3 th{font-size:15px;white-space:nowrap}
-.gr.g3.tight td{font-size:16px;padding:3px 10px} .gr.g3.tight tr.gt td{font-size:19px}
 '''
 
 SCRIPT = '''<script>
 /* SETTINGS: FIN_SRC = the financial board image in this folder ('' to skip). SECONDS = per page:
-   financial, leaderboard, pipeline, proposals. This file is rebuilt automatically from Pipedrive. */
+   financial, leaderboard, pipeline, then each proposals page. This file is rebuilt automatically from Pipedrive. */
 const FIN_SRC='board.png';
-const SECONDS=[60,60,60,60];
+const SECONDS=[60,60,60,60,60,60]; /* one per page; any page without a number gets 60 */
 const fin=document.getElementById('p0');
 if(FIN_SRC){fin.innerHTML=/\\.(png|jpe?g|webp)$/i.test(FIN_SRC)?`<img src="${FIN_SRC}" alt="">`:`<iframe src="${FIN_SRC}" scrolling="no"></iframe>`}
 else{fin.remove();document.getElementById('p1').classList.add('on');document.querySelectorAll('.dots span:first-child').forEach(x=>x.remove())}
@@ -193,7 +192,10 @@ def render(b, open_deals, won, lost, today):
     def hdr(sub, title):
         return (f'<div class="hdr"><div class="l">{BIGFLAG}<div><div class="sub">{code} · {sub}</div><h1>{title}</h1></div></div>\n'
                 f'<div class="r"><b>Bids {wk}</b><br>{asof}</div></div>')
-    def dots(on): return '<span class="dots">' + ''.join('<span class="on"></span>' if k == on else '<span></span>' for k in range(4)) + '</span>'
+    PER_PAGE = 36  # 18 rows per column at full TV size; more proposals roll onto extra pages
+    n_pp = max(1, -(-len(props) // PER_PAGE))
+    total_pages = 3 + n_pp  # financial board + leaderboard + pipeline + proposal pages
+    def dots(on): return '<span class="dots">' + ''.join('<span class="on"></span>' if k == on else '<span></span>' for k in range(total_pages)) + '</span>'
 
     # page 1 – leaderboard
     rows = ''.join(f"<tr class='{'me' if bu == short else ''}'><td class='pos'>{i}</td><td class='pl'>{tag(k)}</td><td class='bu'>{bu}</td>"
@@ -249,31 +251,37 @@ def render(b, open_deals, won, lost, today):
 <div class="foot"><span>Par = Pipedrive stage % · Forecast = value × par · Potential Opportunity through Verbal Award · Past due = bid date passed, deal not yet in Proposal Sent</span>{dots(2)}</div>
 </div>'''
 
-    # page 3 – proposals, two columns, max 36 rows
+    # page 3+ – proposals, two columns, 36 per page, extra pages as needed
     def prow(x):
         d = cf(x, BID); ec = x.get('expected_close_date')
         red = 'redt' if (d and ec and ec < d) else ''
         return (f"<tr><td>{mdy(d) if d else '—'}</td><td class='pj'>{e(trunc(x['title'], 36))}</td><td class='dim'>{pnum(x)}</td>"
                 f"<td>{who(nm(x['owner_id']))}</td><td class='{red}'>{mdy(ec) if ec else '—'}</td><td class='r'>{money(x['value'] or 0)}</td></tr>")
-    cap = 50
-    listed = props[:cap]
-    half = (len(listed) + 1) // 2
     TH = '<thead><tr><th>Bid due</th><th>Project</th><th>Proj #</th><th>Owner</th><th>Exp. close</th><th class="r">Amount</th></tr></thead>'
-    tight = ' tight' if half > 18 else ''
-    extra = f' (first {cap} shown)' if len(props) > cap else ''
-    colA = ''.join(prow(x) for x in listed[:half])
-    colB = ''.join(prow(x) for x in listed[half:]) + \
-        f"<tr class='gt'><td></td><td class='pj'>{len(props)} proposals out{extra}</td><td></td><td></td><td></td><td class='r'>{money(prop_v)}</td></tr>"
-    p3 = f'''<div class="page" id="p3">
+    size = -(-len(props) // n_pp) if props else 0  # spread evenly across the proposal pages
+    p3 = ''
+    for pg in range(n_pp):
+        chunk = props[pg*size:(pg+1)*size]
+        half = (len(chunk) + 1) // 2
+        colA = ''.join(prow(x) for x in chunk[:half])
+        colB = ''.join(prow(x) for x in chunk[half:])
+        if pg == n_pp - 1:
+            colB += f"<tr class='gt'><td></td><td class='pj'>{len(props)} proposals out</td><td></td><td></td><td></td><td class='r'>{money(prop_v)}</td></tr>"
+        part = f' · page {pg+1} of {n_pp}' if n_pp > 1 else ''
+        body = (f'<div class="p3"><table class="gr g3">{TH}<tbody>{colA}</tbody></table><table class="gr g3">{TH}<tbody>{colB}</tbody></table></div>'
+                if props else "<div class='none'>No open proposals.</div>")
+        p3 += f'''<div class="page" id="p{3+pg}">
 {hdr('On the Green', f'{name} Proposals Sent')}
-<div class="panel" style="margin-top:16px"><div class="ptitle">On the Green · Proposals Sent <small>{len(props)} out · {money(prop_v)} · by bid due date</small></div>
-<div class="p3"><table class="gr g3{tight}">{TH}<tbody>{colA}</tbody></table><table class="gr g3{tight}">{TH}<tbody>{colB}</tbody></table></div></div>
-<div class="foot"><span>Open deals in Proposal Sent · Red close date = earlier than bid date · * Name not confirmed in Pipedrive</span>{dots(3)}</div>
-</div>'''
+<div class="panel" style="margin-top:16px"><div class="ptitle">On the Green · Proposals Sent <small>{len(props)} out · {money(prop_v)} · by bid due date{part}</small></div>
+{body}</div>
+<div class="foot"><span>Open deals in Proposal Sent · Red close date = earlier than bid date · * Name not confirmed in Pipedrive</span>{dots(3+pg)}</div>
+</div>
+
+'''
 
     head = open(os.path.join(ROOT, 'scripts', 'tv_head.html'), encoding='utf-8').read().replace('{{TITLE}}', f'{name} Leaderboard')
     page = (head + EXTRA_CSS + '</style></head><body><div id="stage">\n\n<div class="page on fin" id="p0"></div>\n\n'
-            + p1 + '\n\n' + p2 + '\n\n' + p3 + '\n\n</div>\n' + SCRIPT)
+            + p1 + '\n\n' + p2 + '\n\n' + p3 + '</div>\n' + SCRIPT)
     summary = dict(board=b['folder'], open=open_n, open_value=round(open_v), forecast=round(fc), proposals=len(props),
                    proposal_value=round(prop_v), bids_this_week=n_week, past_due=n_past, won=tw, closed=tw + tl)
     return page, summary
