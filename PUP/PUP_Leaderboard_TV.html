@@ -125,7 +125,7 @@ table.gr{width:100%;border-collapse:collapse}
 <script>
 /* SETTINGS: FIN_SRC = the financial board image in this folder ('' to skip). SECONDS = per page:
    financial, leaderboard, pipeline, then each proposals page. This file is rebuilt automatically from Pipedrive. */
-const FIN_SRC='board.png';
+const FIN_SRC='report.html';
 const SECONDS=[60,60,60,60,60,60]; /* one per page; any page without a number gets 60 */
 const fin=document.getElementById('p0');
 if(FIN_SRC){fin.innerHTML=/\.(png|jpe?g|webp)$/i.test(FIN_SRC)?`<img src="${FIN_SRC}" alt="">`:`<iframe src="${FIN_SRC}" scrolling="no"></iframe>`}

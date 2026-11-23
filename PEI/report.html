@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="color-scheme" content="light">
+<title>PEI October 2026 report card</title><style>
+:root{color-scheme:light;--s:#fcfcfb;--pl:#f9f9f7;--i:#0b0b0b;--i2:#52514e;--m:#898781;--gr:#e1e0d9;--ax:#c3c2b7;
+--p:#2a78d6;--p2:#86b6ef;--n:#e34948;--good:#0ca30c;--warn:#fab219;--crit:#d03b3b;--bd:rgba(11,11,11,.10)}
+
+*{box-sizing:border-box}body{margin:0;background:var(--pl);color:var(--i);font:15.5px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.shell{max-width:1020px;margin:0 auto;padding:28px 22px 60px}
+.pg{background:var(--s);border:1px solid var(--bd);border-radius:14px;padding:26px 28px;margin-bottom:20px}
+.eb{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--m);font-weight:650}
+h1{font-size:27px;margin:6px 0;letter-spacing:-.02em}h2{font-size:21px;margin:5px 0 0;letter-spacing:-.015em}
+h3{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--m);margin:0 0 8px;font-weight:650}
+h4{font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 9px;font-weight:700}
+.cap{text-transform:none;letter-spacing:0;font-weight:450}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid var(--gr);padding-bottom:16px;margin-bottom:20px}
+.vd{font-size:14px;color:var(--i2);margin-top:8px;max-width:62ch}
+.gb{text-align:center;flex:none;border:1px solid var(--bd);border-radius:12px;padding:10px 16px 8px;min-width:86px;background:var(--pl)}
+.gl{font-size:40px;font-weight:750;line-height:1;letter-spacing:-.03em}
+.gs{font-size:11px;color:var(--m);margin-top:4px;font-variant-numeric:tabular-nums}
+.gb.a .gl{color:var(--good)}.gb.b .gl{color:var(--p)}.gb.c .gl{color:var(--warn)}.gb.d .gl,.gb.f .gl{color:var(--crit)}
+.cats{margin-bottom:22px}
+.cr{display:grid;grid-template-columns:140px 130px 30px 1fr;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--gr);font-size:13.5px}
+.cn{font-weight:650}
+.ctr{background:var(--gr);border-radius:4px;height:8px;overflow:hidden}
+.cf{height:8px;border-radius:4px}.cf.g{background:var(--good)}.cf.b{background:var(--p)}.cf.c{background:var(--warn)}.cf.d,.cf.f{background:var(--crit)}
+.cvv{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.cvv.g{color:var(--good)}.cvv.b{color:var(--p)}.cvv.c{color:#7a5200}.cvv.d,.cvv.f{color:var(--crit)}
+
+.cd{color:var(--i2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.hb{border:1px solid var(--bd);border-radius:10px;padding:15px 17px;background:var(--pl);border-left:3px solid var(--ax)}
+.hb.good{border-left-color:var(--good)}.hb.good h4{color:#006300}
+.hb.bad{border-left-color:var(--crit)}.hb.bad h4{color:#a12727}
+
+.hb ul{margin:0;padding-left:17px}.hb li{margin:6px 0;font-size:13.5px;color:var(--i2);line-height:1.5}
+.hb li b{color:var(--i)}
+.sp .b.p{fill:var(--p2)}.sp .b.n{fill:var(--n)}.sp .b.hl{fill:var(--p)}.sp .zl{stroke:var(--ax)}
+.sp .xl{fill:var(--m);font-size:9.5px;text-anchor:middle;font-family:inherit}.sp .xl.hlx{fill:var(--i);font-weight:700}
+.sp rect:hover{opacity:.75}
+.kv{width:100%;border-collapse:collapse;margin-top:20px;border-top:1px solid var(--ax)}
+.kv td{padding:12px 10px 12px 0;font-size:12px;color:var(--m);text-transform:uppercase;letter-spacing:.04em;font-weight:650;white-space:nowrap}
+.kv td.n{color:var(--i);text-transform:none;letter-spacing:0;font-size:15.5px;font-weight:700;font-variant-numeric:tabular-nums;padding:12px 30px 12px 0}
+.mu{color:var(--m);font-weight:450}.p{color:var(--p)}.x{color:var(--n)}
+.mix{margin-top:6px;font-size:12.5px;color:var(--i2);display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+border-top:1px solid var(--gr);padding-top:12px}
+.mxl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--m);font-weight:650}
+.mp i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+.d0{background:#2a78d6}.d1{background:#eb6834}.d2{background:#1baf7a}.d3{background:#eda100}.d4{background:#e87ba4}
+.big{width:100%;border-collapse:collapse;margin-top:20px}
+.big th{text-align:right;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--m);font-weight:650;padding:0 0 9px 12px;border-bottom:1px solid var(--ax)}
+.big th:first-child,.big th:nth-child(2){text-align:left;padding-left:0}
+.big td{text-align:right;padding:11px 0 11px 12px;border-bottom:1px solid var(--gr);color:var(--i);font-variant-numeric:tabular-nums}
+.big td.bu{text-align:left;padding-left:0;font-weight:700}.big td.gcell{text-align:left}
+.gt{display:inline-block;min-width:26px;text-align:center;font-weight:750;font-size:15px;padding:2px 7px;border-radius:6px}
+.gt.a{color:#006300;background:rgba(12,163,12,.12)}.gt.b{color:#1c5cab;background:rgba(42,120,214,.12)}
+.gt.c{color:#7a5200;background:rgba(250,178,25,.18)}.gt.d,.gt.f{color:#a12727;background:rgba(208,59,59,.14)}
+
+.sub{color:var(--i2);margin:8px 0 0;max-width:76ch}
+.nt{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--gr);font-size:13.5px;color:var(--i2)}
+
+@media print{body{background:#fff}.pg{page-break-after:always;border:none;padding:0;margin:0 0 18px}}
+
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#f9f9f7}
+#fit{position:absolute;left:0;top:0;transform-origin:0 0;width:1480px}
+#fit .pg{margin:0;border:none;border-radius:0;padding:34px 44px}
+#fit .vd{max-width:none}
+</style></head><body><div id="fit"><section class="pg"><div class="hd"><div><div class="eb">October 2026 report card</div><h2>B20 — Process Equipment &amp; Install</h2>
+<div class="vd">Kept selling, but October's margin collapsed to 9.3% and it lost $129,031 after overhead — the worst month of its year after burden.</div></div><div class="gb f"><div class="gl">F</div><div class="gs">53/100</div></div></div>
+<div class="cats"><div class="cr"><div class="cn">Revenue vs goal</div><div class="ctr"><div class="cf f" style="width:56%"></div></div>
+<div class="cvv f">56</div><div class="cd">$446,353 · 56% of the $791,667 monthly goal</div></div><div class="cr"><div class="cn">Margin vs target</div><div class="ctr"><div class="cf f" style="width:28%"></div></div>
+<div class="cvv f">28</div><div class="cd">9.3% against a 33% target</div></div><div class="cr"><div class="cn">Covered overhead</div><div class="ctr"><div class="cf f" style="width:24%"></div></div>
+<div class="cvv f">24</div><div class="cd">$41,316 gross profit against a $170,347 burden</div></div><div class="cr"><div class="cn">Momentum</div><div class="ctr"><div class="cf f" style="width:59%"></div></div>
+<div class="cvv f">59</div><div class="cd">up 9% vs its own monthly average</div></div><div class="cr"><div class="cn">Cost discipline</div><div class="ctr"><div class="cf g" style="width:100%"></div></div>
+<div class="cvv g">100</div><div class="cd">own overhead $90,347, −12% vs its average</div></div></div>
+<div class="two">
+<div class="hb good"><h4>What went well</h4><ul><li><b>$589,983</b> of new work booked — PEI has booked work every month this year.</li><li>Backlog up to <b>$936,851</b> from $793,221.</li><li>Own overhead <b>$90,347</b>, 12% under its own average.</li><li>Revenue sent to NXA up <b>$237,857</b> in October to $1,201,103 for the year.</li></ul></div>
+<div class="hb bad"><h4>What did not</h4><ul><li>Gross margin <b>9.3%</b> — lowest month of the year, against a 33% target.</li><li><b>−$129,031</b> after overhead; has covered its burden only <b>2 of 10 months</b> (March, September).</li><li>Revenue <b>$446,353</b> — 56% of the $791,667 monthly goal.</li><li>Material is <b>67%</b> of October job cost — check whether material was bought ahead of billing.</li></ul></div></div>
+<div class="two" style="margin-top:22px">
+<div><h3>Revenue by month <span class="cap">October highlighted</span></h3><svg viewBox="0 0 330 74" width="100%" height="74" class="sp"><line x1="0" y1="58.0" x2="330" y2="58.0" class="zl"/><rect x="0.0" y="14.4" width="28.6" height="43.6" rx="4.0" class="b p"><title>Jan: $380,770</title></rect><text x="14.3" y="70" class="xl ">Jan</text><rect x="33.5" y="14.5" width="28.6" height="43.5" rx="4.0" class="b p"><title>Feb: $379,166</title></rect><text x="47.8" y="70" class="xl ">Feb</text><rect x="67.0" y="0.9" width="28.6" height="57.1" rx="4.0" class="b p"><title>Mar: $497,988</title></rect><text x="81.3" y="70" class="xl ">Mar</text><rect x="100.5" y="23.2" width="28.6" height="34.8" rx="4.0" class="b p"><title>Apr: $303,304</title></rect><text x="114.8" y="70" class="xl ">Apr</text><rect x="134.0" y="9.0" width="28.6" height="49.0" rx="4.0" class="b p"><title>May: $427,211</title></rect><text x="148.3" y="70" class="xl ">May</text><rect x="167.4" y="9.4" width="28.6" height="48.6" rx="4.0" class="b p"><title>Jun: $424,364</title></rect><text x="181.7" y="70" class="xl ">Jun</text><rect x="200.9" y="17.3" width="28.6" height="40.7" rx="4.0" class="b p"><title>Jul: $355,393</title></rect><text x="215.2" y="70" class="xl ">Jul</text><rect x="234.4" y="13.4" width="28.6" height="44.6" rx="4.0" class="b p"><title>Aug: $389,076</title></rect><text x="248.7" y="70" class="xl ">Aug</text><rect x="267.9" y="0.0" width="28.6" height="58.0" rx="4.0" class="b p"><title>Sep: $505,999</title></rect><text x="282.2" y="70" class="xl ">Sep</text><rect x="301.4" y="6.8" width="28.6" height="51.2" rx="4.0" class="b hl"><title>Oct: $446,353</title></rect><text x="315.7" y="70" class="xl hlx">Oct</text></svg></div>
+<div><h3>Gross margin by month</h3><svg viewBox="0 0 330 74" width="100%" height="74" class="sp"><line x1="0" y1="58.0" x2="330" y2="58.0" class="zl"/><rect x="0.0" y="16.9" width="28.6" height="41.1" rx="4.0" class="b p"><title>Jan: 43.0%</title></rect><text x="14.3" y="70" class="xl ">Jan</text><rect x="33.5" y="25.9" width="28.6" height="32.1" rx="4.0" class="b p"><title>Feb: 33.6%</title></rect><text x="47.8" y="70" class="xl ">Feb</text><rect x="67.0" y="0.0" width="28.6" height="58.0" rx="4.0" class="b p"><title>Mar: 60.7%</title></rect><text x="81.3" y="70" class="xl ">Mar</text><rect x="100.5" y="31.9" width="28.6" height="26.1" rx="4.0" class="b p"><title>Apr: 27.3%</title></rect><text x="114.8" y="70" class="xl ">Apr</text><rect x="134.0" y="25.8" width="28.6" height="32.2" rx="4.0" class="b p"><title>May: 33.7%</title></rect><text x="148.3" y="70" class="xl ">May</text><rect x="167.4" y="38.0" width="28.6" height="20.0" rx="4.0" class="b p"><title>Jun: 20.9%</title></rect><text x="181.7" y="70" class="xl ">Jun</text><rect x="200.9" y="34.5" width="28.6" height="23.5" rx="4.0" class="b p"><title>Jul: 24.6%</title></rect><text x="215.2" y="70" class="xl ">Jul</text><rect x="234.4" y="23.1" width="28.6" height="34.9" rx="4.0" class="b p"><title>Aug: 36.5%</title></rect><text x="248.7" y="70" class="xl ">Aug</text><rect x="267.9" y="15.8" width="28.6" height="42.2" rx="4.0" class="b p"><title>Sep: 44.2%</title></rect><text x="282.2" y="70" class="xl ">Sep</text><rect x="301.4" y="49.2" width="28.6" height="8.8" rx="4.0" class="b hl"><title>Oct: 9.3%</title></rect><text x="315.7" y="70" class="xl hlx">Oct</text></svg></div></div>
+<table class="kv"><tr><td>October revenue</td><td class="n">$446,353</td>
+<td>Gross profit</td><td class="n">$41,316 <span class="mu">(9.3%)</span></td>
+<td>Burden</td><td class="n">$170,347</td>
+<td>After overhead</td><td class="n x"><b>−$129,031</b></td></tr></table>
+<div class="mix"><span class="mxl">October job cost mix</span><span class="mp"><i class="d0"></i>labor 17%</span><span class="mp"><i class="d1"></i>material 67%</span><span class="mp"><i class="d2"></i>subs 5%</span><span class="mp"><i class="d3"></i>equip 1%</span><span class="mp"><i class="d4"></i>other 11%</span></div>
+</section></div>
+<script>
+const f=document.getElementById('fit');const s=Math.min(1920/f.offsetWidth,1080/f.offsetHeight);
+f.style.transform=`scale(${s})`;f.style.left=((1920-f.offsetWidth*s)/2)+'px';f.style.top=((1080-f.offsetHeight*s)/2)+'px';
+</script></body></html>
