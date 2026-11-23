@@ -1,6 +1,6 @@
 name: Refresh TV boards from Pipedrive
 
-# Rebuilds TF/TF_Leaderboard_TV.html and PEI/PEI_Leaderboard_TV.html from live Pipedrive data.
+# Rebuilds the TF, PEI, PUP and HVAC golf boards from live Pipedrive data.
 # TVs keep the same address (e.g. .../TF/tv.html) and reload every 30 minutes on their own.
 #
 # Schedule: every hour, 5 AM to 6 PM Central, Monday to Friday (cron is in UTC).
@@ -36,7 +36,7 @@ jobs:
         run: |
           git config user.name "tv-boards-bot"
           git config user.email "tv-boards-bot@users.noreply.github.com"
-          git add TF PEI
+          git add TF PEI PUP HVAC
           if git diff --cached --quiet; then
             echo "No changes."
           else

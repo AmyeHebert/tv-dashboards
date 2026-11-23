@@ -25,16 +25,21 @@ DEPT_SHORT = {357: 'TF', 360: 'PEI', 359: 'PUP', 358: 'HVAC', 361: 'Parts'}
 # ---- Owners: Pipedrive user id -> name shown on the boards ----
 NAME = {21822426: 'Troy Tanner', 24235023: 'Brett Shannon', 22740420: 'Cody Robinson', 21905905: 'Cody Robinson',
         24868799: 'Kyle Rubeck', 23915891: 'Taylor', 24836712: 'Davey', 24398395: 'Chris', 25453438: 'Gustavo',
-        26058900: 'Brian', 23393941: 'Aaron', 23362723: 'KJ', 23399606: 'Hunter', 24182355: 'Bob'}
+        26058900: 'Brian', 23393941: 'Aaron', 23362723: 'KJ', 23399606: 'Hunter', 24182355: 'Bob',
+        27224636: 'Megan'}
 UNCONFIRMED = {'KJ', 'Hunter', 'Bob'}          # shown with *
 FORMER = {'Troy Tanner', 'Hunter', 'Bob'}      # shown with Former tag
 
-# ---- Boards to build. Add PUP / HVAC here when ready. ----
+# ---- Boards to build ----
 BOARDS = [
     dict(folder='TF', file='TF_Leaderboard_TV.html', code='B30', dept=357, short='TF', name='Thermal Fluid',
          team=['Davey', 'Taylor']),
     dict(folder='PEI', file='PEI_Leaderboard_TV.html', code='B20', dept=360, short='PEI', name='PEI',
          team=['Chris', 'Brian', 'Gustavo']),
+    dict(folder='PUP', file='PUP_Leaderboard_TV.html', code='B10', dept=359, short='PUP', name='PUP',
+         team=['Megan', 'KJ']),
+    dict(folder='HVAC', file='HVAC_Leaderboard_TV.html', code='B40', dept=358, short='HVAC', name='HVAC',
+         team=['Aaron']),
 ]
 
 # Stage id, name, short label, Pipedrive stage %
@@ -151,7 +156,7 @@ def render(b, open_deals, won, lost, today):
     wk = f"{ws.strftime('%b')} {ws.day} – {we.day}" if ws.month == we.month else f"{ws.strftime('%b')} {ws.day} – {we.strftime('%b')} {we.day}"
     asof = f'Thru {today.month}/{today.day}/{year[2:]} · Pipedrive'
     w26 = [x for x in won if (x.get('won_time') or '')[:4] == year]
-    l26 = [x for x in lost if (x.get('lost_time') or '')[:4] == year]
+    l26 = [x for x in lost if (x.get('lost_time') or '')[:4] == year and (x.get('lost_reason') or '') != 'Test Record']
     o = [x for x in open_deals if cf(x, DEPT) == b['dept']]
 
     st = []
