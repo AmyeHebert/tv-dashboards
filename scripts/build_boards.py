@@ -30,6 +30,9 @@ NAME = {21822426: 'Troy Tanner', 24235023: 'Brett Shannon', 22740420: 'Cody Robi
 UNCONFIRMED = {'KJ', 'Hunter', 'Bob'}          # shown with *
 FORMER = {'Troy Tanner', 'Hunter', 'Bob'}      # shown with Former tag
 
+# Deals never shown on any board (Pipedrive deal ids)
+EXCLUDE_DEALS = {1476}  # ARMI Contractors HQ - PACK EXPO 2026
+
 # ---- Boards to build ----
 BOARDS = [
     dict(folder='TF', file='TF_Leaderboard_TV.html', code='B30', dept=357, short='TF', name='Thermal Fluid',
@@ -300,6 +303,8 @@ def main():
     args = ap.parse_args()
     today = dt.date.fromisoformat(args.today) if args.today else dt.datetime.now(TZ).date()
     open_deals, won, lost = load(args, today.year)
+    keep = lambda xs: [x for x in xs if x['id'] not in EXCLUDE_DEALS]
+    open_deals, won, lost = keep(open_deals), keep(won), keep(lost)
     for b in BOARDS:
         page, summary = render(b, open_deals, won, lost, today)
         os.makedirs(os.path.join(args.out, b['folder']), exist_ok=True)
